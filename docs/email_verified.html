@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Verified — LOADOUT</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0a0a0a;
+      color: #e8e8e8;
+      font-family: "SF Mono", "Fira Mono", "Consolas", monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      border: 1px solid #2a2a2a;
+      padding: 3rem 2.5rem;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: -1px;
+      width: 16px; height: 16px;
+      border-top: 2px solid #e8e8e8;
+      border-left: 2px solid #e8e8e8;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; right: -1px;
+      width: 16px; height: 16px;
+      border-bottom: 2px solid #e8e8e8;
+      border-right: 2px solid #e8e8e8;
+    }
+
+    .wordmark {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #555;
+      margin-bottom: 2.5rem;
+    }
+
+    .check {
+      width: 52px;
+      height: 52px;
+      border: 2px solid #e8e8e8;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 2rem;
+    }
+
+    .check svg {
+      width: 24px;
+      height: 24px;
+      stroke: #e8e8e8;
+      stroke-width: 2.5;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    h1 {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 0.85rem;
+      color: #999;
+      line-height: 1.7;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1e1e1e;
+      margin: 2rem 0;
+    }
+
+    footer {
+      font-size: 0.7rem;
+      color: #3a3a3a;
+      letter-spacing: 0.1em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="wordmark">Spectrum Works / LOADOUT</div>
+
+    <div class="check">
+      <svg viewBox="0 0 24 24">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+
+    <h1>Email Verified</h1>
+    <p>Your email has been verified.<br>You can now return to LOADOUT.</p>
+
+    <hr class="divider">
+
+    <footer>Questions? &nbsp;developer@tkb.us</footer>
+  </div>
+
+</body>
+</html>
