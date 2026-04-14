@@ -95,4 +95,4 @@ If this policy changes materially, the updated version will be posted with a rev
 
 ## 11. Contact
 
-Questions about this privacy policy can be directed to Spectrum Works.
+Questions about this privacy policy can be directed to Spectrum Works at developer@loadoutapp.cloud.

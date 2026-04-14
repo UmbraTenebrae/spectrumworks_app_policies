@@ -2,7 +2,7 @@
 
 **Effective date:** 12 April 2026  
 **Developer:** Spectrum Works  
-**Contact:** developer@tkb.us
+**Contact:** developer@spectrumworks.online
 
 ---
 
@@ -102,7 +102,7 @@ If we make material changes to this privacy policy, we will update the effective
 If you have questions about this privacy policy, please contact:
 
 **Spectrum Works**  
-developer@tkb.us
+developer@spectrumworks.online
 
 ---
 
