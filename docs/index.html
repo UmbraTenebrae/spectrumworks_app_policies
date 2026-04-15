@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LOADOUT — Stay Ready</title>
+  <meta name="description" content="LOADOUT is the firearm maintenance and ammo tracking app built for serious shooters. Stay mission ready." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --black: #000000;
+      --off-black: #0a0a0a;
+      --dark: #111111;
+      --mid: #1a1a1a;
+      --border: #222222;
+      --border-light: #2e2e2e;
+      --white: #ffffff;
+      --off-white: #e8e8e8;
+      --muted: #666666;
+      --dim: #333333;
+      --accent: #ffffff;
+      --font-display: 'Bebas Neue', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── UTILITY ─────────────────────────────── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      display: inline-block;
+    }
+
+    /* ── NAV ─────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      letter-spacing: 0.2em;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .store-badge-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: default;
+      text-decoration: none;
+      transition: border-color 0.2s;
+      white-space: nowrap;
+    }
+
+    .store-badge-nav svg {
+      opacity: 0.4;
+    }
+
+    .store-badge-nav .badge-soon {
+      font-size: 0.55rem;
+      color: var(--muted);
+    }
+
+    /* ── HERO ────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 120px 0 80px;
+    }
+
+    /* Tactical grid background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    /* Radial fade to black over the grid */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 40%, transparent 30%, var(--black) 80%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .hero-eyebrow {
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(5rem, 18vw, 14rem);
+      line-height: 0.9;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      margin-bottom: 32px;
+    }
+
+    .hero-tagline {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+      letter-spacing: 0.12em;
+      color: var(--off-white);
+      margin-bottom: 20px;
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+    }
+
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      background: var(--white);
+      color: var(--black);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--white);
+      cursor: default;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      background: transparent;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      cursor: default;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-soon {
+      font-size: 0.6rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .hero-scroll {
+      margin-top: 80px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .scroll-line {
+      width: 48px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .scroll-text {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+
+    /* ── STATS BAR ───────────────────────────── */
+    .stats-bar {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 28px 0;
+    }
+
+    .stats-inner {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+
+    .stat-item {
+      padding: 0 24px;
+      border-right: 1px solid var(--border);
+    }
+
+    .stat-item:first-child {
+      padding-left: 0;
+    }
+
+    .stat-item:last-child {
+      border-right: none;
+    }
+
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── SECTION SHARED ──────────────────────── */
+    section {
+      padding: 100px 0;
+    }
+
+    .section-header {
+      margin-bottom: 64px;
+    }
+
+    .section-label {
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      letter-spacing: 0.06em;
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    /* ── FEATURES GRID ───────────────────────── */
+    .features {
+      background: var(--off-black);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+
+    .feature-card {
+      padding: 40px 32px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+
+    .feature-card:nth-child(3n) {
+      border-right: none;
+    }
+
+    .feature-card:nth-last-child(-n+3) {
+      border-bottom: none;
+    }
+
+    .feature-card:hover {
+      background: var(--mid);
+    }
+
+    .feature-icon {
+      width: 36px;
+      height: 36px;
+      margin-bottom: 20px;
+      opacity: 0.9;
+    }
+
+    .feature-num {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--dim);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .feature-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .feature-desc {
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── DETAIL SECTION ──────────────────────── */
+    .detail {
+      background: var(--black);
+    }
+
+    .detail-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .detail-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .detail-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-list li:last-child {
+      border-bottom: none;
+    }
+
+    .detail-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--white);
+      flex-shrink: 0;
+      margin-top: 8px;
+    }
+
+    .detail-list-title {
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: var(--white);
+      margin-bottom: 2px;
+    }
+
+    .detail-list-sub {
+      font-size: 0.825rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .detail-visual {
+      background: var(--dark);
+      border: 1px solid var(--border);
+      padding: 32px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      line-height: 1.8;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .detail-visual::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--white);
+      opacity: 0.06;
+    }
+
+    .dv-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dv-title {
+      color: var(--off-white);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .dv-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .dv-name {
+      color: var(--off-white);
+      font-size: 0.7rem;
+    }
+
+    .dv-status {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border: 1px solid;
+    }
+
+    .status-overdue {
+      color: #ff4444;
+      border-color: rgba(255,68,68,0.3);
+      background: rgba(255,68,68,0.06);
+    }
+
+    .status-due {
+      color: #f5a623;
+      border-color: rgba(245,166,35,0.3);
+      background: rgba(245,166,35,0.06);
+    }
+
+    .status-ok {
+      color: #4cd964;
+      border-color: rgba(76,217,100,0.3);
+      background: rgba(76,217,100,0.06);
+    }
+
+    .dv-rounds {
+      color: var(--muted);
+      font-size: 0.65rem;
+    }
+
+    /* ── COMPETITIVE ─────────────────────────── */
+    .competitive {
+      background: var(--off-black);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .orgs-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+      margin-top: 48px;
+    }
+
+    .org-card {
+      padding: 32px 24px;
+      border-right: 1px solid var(--border);
+    }
+
+    .org-card:last-child {
+      border-right: none;
+    }
+
+    .org-name {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      letter-spacing: 0.1em;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .org-divs {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .org-divs li {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ── APP STORE ───────────────────────────── */
+    .app-store {
+      background: var(--black);
+      text-align: center;
+    }
+
+    .app-store .section-title {
+      margin-bottom: 12px;
+    }
+
+    .app-store .section-sub {
+      margin: 0 auto 48px;
+    }
+
+    .store-badges {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .store-badge {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 28px;
+      border: 1px solid var(--border);
+      background: var(--dark);
+      text-decoration: none;
+      cursor: default;
+      transition: border-color 0.2s;
+      min-width: 200px;
+    }
+
+    .store-badge-icon {
+      opacity: 0.35;
+      flex-shrink: 0;
+    }
+
+    .store-badge-text {
+      text-align: left;
+    }
+
+    .store-badge-sub {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .store-badge-name {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .store-coming-soon {
+      margin-top: 20px;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    /* ── FOOTER ──────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      letter-spacing: 0.2em;
+      color: var(--white);
+    }
+
+    .footer-copy {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--white);
+    }
+
+    /* ── CROSSHAIR DIVIDER ───────────────────── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .divider-line {
+      height: 1px;
+      width: 32px;
+      background: var(--border);
+    }
+
+    /* ── ANIMATIONS ──────────────────────────── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-eyebrow  { animation: fadeInUp 0.6s ease both; animation-delay: 0.1s; }
+    .hero-title    { animation: fadeInUp 0.6s ease both; animation-delay: 0.2s; }
+    .hero-tagline  { animation: fadeInUp 0.6s ease both; animation-delay: 0.35s; }
+    .hero-sub      { animation: fadeInUp 0.6s ease both; animation-delay: 0.45s; }
+    .hero-cta      { animation: fadeInUp 0.6s ease both; animation-delay: 0.55s; }
+    .hero-scroll   { animation: fadeInUp 0.6s ease both; animation-delay: 0.7s; }
+
+    /* ── RESPONSIVE ──────────────────────────── */
+    @media (max-width: 900px) {
+      .stats-inner {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stat-item:nth-child(2) {
+        border-right: none;
+      }
+
+      .stat-item:nth-child(3) {
+        border-right: 1px solid var(--border);
+        padding-top: 24px;
+        border-top: 1px solid var(--border);
+      }
+
+      .stat-item:nth-child(4) {
+        border-right: none;
+        padding-top: 24px;
+        border-top: 1px solid var(--border);
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .feature-card:nth-child(3n) {
+        border-right: 1px solid var(--border);
+      }
+
+      .feature-card:nth-child(2n) {
+        border-right: none;
+      }
+
+      .feature-card:nth-last-child(-n+3) {
+        border-bottom: 1px solid var(--border);
+      }
+
+      .feature-card:nth-last-child(-n+2) {
+        border-bottom: none;
+      }
+
+      .detail-split {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .detail-visual {
+        order: -1;
+      }
+
+      .orgs-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .org-card:nth-child(2) {
+        border-right: none;
+      }
+
+      .org-card:nth-child(3) {
+        border-top: 1px solid var(--border);
+        border-right: 1px solid var(--border);
+      }
+
+      .org-card:last-child {
+        border-top: 1px solid var(--border);
+      }
+
+      .nav-right {
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-card {
+        border-right: none !important;
+        border-bottom: 1px solid var(--border) !important;
+      }
+
+      .feature-card:last-child {
+        border-bottom: none !important;
+      }
+
+      .orgs-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .org-card {
+        border-right: none !important;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .org-card:last-child {
+        border-bottom: none;
+      }
+
+      .stats-inner {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .store-badges {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ─────────────────────────────────── -->
+  <nav>
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo">LOADOUT</a>
+        <div class="nav-right">
+          <span class="store-badge-nav">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            <div>
+              <div style="color:var(--muted);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;font-family:var(--font-mono)">App Store</div>
+              <div class="badge-soon">Coming Soon</div>
+            </div>
+          </span>
+          <span class="store-badge-nav">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M3.18 23.76c.3.17.63.24.97.21l.09-.05 11.09-6.42-2.39-2.4-9.76 8.66zm-1.67-20.4A1.98 1.98 0 0 0 1.37 4v16.04c0 .6.18 1.1.53 1.47l.08.07 8.99-8.97v-.22L1.51 3.36zm17.72 8.13-2.53-1.47-2.69 2.69 2.69 2.7 2.56-1.48c.73-.42.73-1.11-.03-1.44zm-17.06 9.3 9.12-9.1-2.4-2.41L1.26 21.37c.29.36.7.59 1.17.59.34 0 .67-.1.74-.17z"/></svg>
+            <div>
+              <div style="color:var(--muted);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;font-family:var(--font-mono)">Google Play</div>
+              <div class="badge-soon">Coming Soon</div>
+            </div>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── HERO ────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="label">Firearm Management System</span>
+      </div>
+
+      <h1 class="hero-title">LOADOUT</h1>
+
+      <p class="hero-tagline">Stay Ready.</p>
+
+      <p class="hero-sub">
+        The firearm maintenance and ammo tracking app built for shooters who don't leave things to chance. Track maintenance schedules, manage your inventory, and stay mission ready — on iOS and Android.
+      </p>
+
+      <div class="hero-cta">
+        <span class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="black"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          App Store
+          <span class="btn-soon">— Coming Soon</span>
+        </span>
+        <span class="btn-outline">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.3.17.63.24.97.21l.09-.05 11.09-6.42-2.39-2.4-9.76 8.66zm-1.67-20.4A1.98 1.98 0 0 0 1.37 4v16.04c0 .6.18 1.1.53 1.47l.08.07 8.99-8.97v-.22L1.51 3.36zm17.72 8.13-2.53-1.47-2.69 2.69 2.69 2.7 2.56-1.48c.73-.42.73-1.11-.03-1.44zm-17.06 9.3 9.12-9.1-2.4-2.41L1.26 21.37c.29.36.7.59 1.17.59.34 0 .67-.1.74-.17z"/></svg>
+          Google Play
+          <span class="btn-soon">— Coming Soon</span>
+        </span>
+      </div>
+
+      <div class="hero-scroll">
+        <div class="scroll-line"></div>
+        <span class="scroll-text">Scroll to explore</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STATS BAR ──────────────────────────── -->
+  <div class="stats-bar">
+    <div class="container">
+      <div class="stats-inner">
+        <div class="stat-item">
+          <div class="stat-number">30+</div>
+          <div class="stat-label">Firearm Models Supported</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">4</div>
+          <div class="stat-label">Competitive Orgs</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">2</div>
+          <div class="stat-label">Platforms — iOS &amp; Android</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">Rounds Tracked</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FEATURES ───────────────────────────── -->
+  <section class="features">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label label">Core Features</div>
+        <h2 class="section-title" style="margin-top:16px;">Everything your arsenal needs.</h2>
+        <p class="section-sub">From the range to the safe — LOADOUT keeps every detail in order.</p>
+      </div>
+
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <svg class="feature-icon" viewBox="0 0 36 36" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="4" width="28" height="28" rx="2"/>
+            <path d="M11 18h14M18 11v14"/>
+            <circle cx="18" cy="18" r="4"/>
+          </svg>
+          <span class="feature-num">01</span>
+          <div class="feature-title">Maintenance Tracking</div>
+          <p class="feature-desc">Interval-based tasks keyed to rounds fired, elapsed time, or both. Color-coded alerts surface what's overdue or coming due across every gun in your collection.</p>
+        </div>
+
+        <div class="feature-card">
+          <svg class="feature-icon" viewBox="0 0 36 36" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 28l4-8 4 4 4-12 4 8 4-4"/>
+            <line x1="6" y1="30" x2="30" y2="30"/>
+          </svg>
+          <span class="feature-num">02</span>
+          <div class="feature-title">Ammo Inventory</div>
+          <p class="feature-desc">Track round counts by caliber, brand, and load. Per-entry low-stock thresholds trigger alerts before you run dry. Counts update automatically when you log range sessions.</p>
+        </div>
+
+        <div class="feature-card">
+          <svg class="feature-icon" viewBox="0 0 36 36" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="18" r="12"/>
+            <path d="M18 10v8l5 3"/>
+          </svg>
+          <span class="feature-num">03</span>
+          <div class="feature-title">Range Session Log</div>
+          <p class="feature-desc">Log every session with firearm, rounds fired, and ammo lot used. One tap from the dashboard FAB — round counts and inventory update in a single atomic transaction.</p>
+        </div>
+
+        <div class="feature-card">
+          <svg class="feature-icon" viewBox="0 0 36 36" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 20l4-4 4 4 12-12"/>
+            <path d="M6 28h24"/>
+          </svg>
+          <span class="feature-num">04</span>
+          <div class="feature-title">Model-Specific Setup</div>
+          <p class="feature-desc">Add a Glock, CZ Shadow 2, AR-15, or Benelli M2 and get a pre-populated task list sourced from manufacturer guidance and community best practices — instantly.</p>
+        </div>
+
+        <div class="feature-card">
+          <svg class="feature-icon" viewBox="0 0 36 36" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="14" cy="12" r="4"/>
+            <circle cx="24" cy="22" r="4"/>
+            <path d="M18 12h4a4 4 0 0 1 4 4v2M10 22H6a4 4 0 0 1-4-4v-2"/>
+          </svg>
+          <span class="feature-num">05</span>
+          <div class="feature-title">Cloud Sync</div>
+          <p class="feature-desc">Sync your full dataset across all devices automatically. Incremental sync means only changed rows are transmitted. Works in the foreground, background, or on demand.</p>
+        </div>
+
+        <div class="feature-card">
+          <svg class="feature-icon" viewBox="0 0 36 36" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 8h16v4H10zM8 12h20l-2 16H10L8 12z"/>
+            <path d="M14 16v8M18 16v8M22 16v8"/>
+          </svg>
+          <span class="feature-num">06</span>
+          <div class="feature-title">Data Export</div>
+          <p class="feature-desc">Export your firearms, maintenance logs, range sessions, and ammo inventory as CSV — filtered by gun or in full. Share to Files, email, or any spreadsheet app.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MAINTENANCE DETAIL ─────────────────── -->
+  <section class="detail">
+    <div class="container">
+      <div class="detail-split">
+        <div>
+          <div class="section-label label" style="margin-bottom:16px;">Maintenance System</div>
+          <h2 class="section-title">Nothing slips through the cracks.</h2>
+          <p class="section-sub" style="margin-bottom:32px;">
+            Tasks track intervals in rounds fired, days elapsed, or both simultaneously. The moment a gun is added with a known acquisition date, every time-based task immediately shows the correct status — no manual setup required.
+          </p>
+          <ul class="detail-list">
+            <li>
+              <div class="detail-dot"></div>
+              <div>
+                <div class="detail-list-title">Dual-mode intervals</div>
+                <div class="detail-list-sub">Set a task to fire after 500 rounds, 30 days, or whichever comes first.</div>
+              </div>
+            </li>
+            <li>
+              <div class="detail-dot"></div>
+              <div>
+                <div class="detail-list-title">Push notifications</div>
+                <div class="detail-list-sub">Get notified the day a time-based task comes due — even when the app is closed.</div>
+              </div>
+            </li>
+            <li>
+              <div class="detail-dot"></div>
+              <div>
+                <div class="detail-list-title">Full history log</div>
+                <div class="detail-list-sub">Every completed task is recorded with the date and round count at completion.</div>
+              </div>
+            </li>
+            <li>
+              <div class="detail-dot"></div>
+              <div>
+                <div class="detail-list-title">Spare parts tracking</div>
+                <div class="detail-list-sub">Scope parts inventory per firearm or mark as universal spares across your collection.</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Faux-UI mockup -->
+        <div class="detail-visual">
+          <div class="dv-bar">
+            <span class="dv-title">Maintenance — Glock 34</span>
+            <span style="font-size:0.65rem;color:var(--muted);letter-spacing:0.08em;">4,217 RDS</span>
+          </div>
+
+          <div class="dv-row">
+            <span class="dv-name">Recoil Spring</span>
+            <span class="dv-status status-overdue">Overdue</span>
+          </div>
+          <div class="dv-row">
+            <span class="dv-name">Field Strip &amp; Clean</span>
+            <span class="dv-status status-due">Due Soon</span>
+          </div>
+          <div class="dv-row">
+            <span class="dv-name">Extractor Inspect</span>
+            <span class="dv-status status-ok">OK</span>
+          </div>
+          <div class="dv-row">
+            <span class="dv-name">Trigger Job Check</span>
+            <span class="dv-status status-ok">OK</span>
+          </div>
+          <div class="dv-row">
+            <span class="dv-name">Connector Lube</span>
+            <span class="dv-status status-ok">OK</span>
+          </div>
+
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);display:flex;gap:24px;">
+            <div>
+              <div style="font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">Overdue</div>
+              <div style="font-size:1.1rem;color:#ff4444;font-family:var(--font-display);letter-spacing:0.08em;">1</div>
+            </div>
+            <div>
+              <div style="font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">Due Soon</div>
+              <div style="font-size:1.1rem;color:#f5a623;font-family:var(--font-display);letter-spacing:0.08em;">1</div>
+            </div>
+            <div>
+              <div style="font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">OK</div>
+              <div style="font-size:1.1rem;color:#4cd964;font-family:var(--font-display);letter-spacing:0.08em;">3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── COMPETITIVE ────────────────────────── -->
+  <section class="competitive">
+    <div class="container">
+      <div class="section-label label" style="margin-bottom:16px;">For Competitors</div>
+      <h2 class="section-title">Built for the range. Ready for the stage.</h2>
+      <p class="section-sub">Tag any firearm to one or more competitive divisions. Know exactly which gun fits which class.</p>
+
+      <div class="orgs-grid">
+        <div class="org-card">
+          <div class="org-name">USPSA</div>
+          <ul class="org-divs">
+            <li>Carry Optics</li>
+            <li>Limited</li>
+            <li>Limited 10</li>
+            <li>Open</li>
+            <li>PCC</li>
+            <li>Production</li>
+            <li>Single Stack</li>
+          </ul>
+        </div>
+        <div class="org-card">
+          <div class="org-name">IDPA</div>
+          <ul class="org-divs">
+            <li>Back-Up Gun</li>
+            <li>Carry Optics</li>
+            <li>Compact Carry</li>
+            <li>Enhanced Service</li>
+            <li>PCC</li>
+            <li>Revolver</li>
+            <li>Stock Service</li>
+          </ul>
+        </div>
+        <div class="org-card">
+          <div class="org-name">IPSC</div>
+          <ul class="org-divs">
+            <li>Classic</li>
+            <li>Open</li>
+            <li>PCC</li>
+            <li>Production</li>
+            <li>Prod. Optics</li>
+            <li>Revolver</li>
+            <li>Standard</li>
+          </ul>
+        </div>
+        <div class="org-card">
+          <div class="org-name">PRS</div>
+          <ul class="org-divs">
+            <li>Gas Gun</li>
+            <li>Open</li>
+            <li>Production</li>
+            <li>Tactical</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── APP STORE ──────────────────────────── -->
+  <section class="app-store" id="download">
+    <div class="container">
+      <div class="section-label label" style="margin-bottom:16px;">Download</div>
+      <h2 class="section-title">Get LOADOUT.</h2>
+      <p class="section-sub">Available on iOS and Android. Pending app store approval — check back soon.</p>
+
+      <div class="store-badges">
+        <span class="store-badge">
+          <svg class="store-badge-icon" width="32" height="32" viewBox="0 0 24 24" fill="white"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          <div class="store-badge-text">
+            <div class="store-badge-sub">Download on the</div>
+            <div class="store-badge-name">App Store</div>
+          </div>
+        </span>
+        <span class="store-badge">
+          <svg class="store-badge-icon" width="32" height="32" viewBox="0 0 24 24" fill="white"><path d="M3.18 23.76c.3.17.63.24.97.21l.09-.05 11.09-6.42-2.39-2.4-9.76 8.66zm-1.67-20.4A1.98 1.98 0 0 0 1.37 4v16.04c0 .6.18 1.1.53 1.47l.08.07 8.99-8.97v-.22L1.51 3.36zm17.72 8.13-2.53-1.47-2.69 2.69 2.69 2.7 2.56-1.48c.73-.42.73-1.11-.03-1.44zm-17.06 9.3 9.12-9.1-2.4-2.41L1.26 21.37c.29.36.7.59 1.17.59.34 0 .67-.1.74-.17z"/></svg>
+          <div class="store-badge-text">
+            <div class="store-badge-sub">Get it on</div>
+            <div class="store-badge-name">Google Play</div>
+          </div>
+        </span>
+      </div>
+
+      <p class="store-coming-soon">Pending approval — links coming soon</p>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ─────────────────────────────── -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo">LOADOUT</span>
+        <div class="footer-links">
+          <a href="privacy.html">Privacy Policy</a>
+        </div>
+        <span class="footer-copy">&copy; 2026 LOADOUT. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
