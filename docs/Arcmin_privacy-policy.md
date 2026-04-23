@@ -9,7 +9,7 @@ permalink: /privacy-policy/
 **Effective date:** April 23, 2026
 **App:** Arcmin — exterior ballistics solver
 **Publisher:** Spectrum Works
-**Contact:** support@spectrumworks.example  *(replace with your actual support email before publishing)*
+**Contact:** developer@spectrumworks.online
 
 ---
 
@@ -99,16 +99,14 @@ Backup files you export are plain JSON. If you store these in cloud storage or s
 
 We may update this Privacy Policy from time to time. Material changes will be communicated by updating the "Effective date" at the top of this document and, where appropriate, by an in-app notice on next launch after the change. Continued use of Arcmin after a policy update constitutes acceptance of the updated terms.
 
-The full version history of this policy is publicly visible in the [Arcmin source repository](https://github.com/UmbraTenebrae/arcmin).
-
 ## 11. Your rights
 
 Because we do not collect or store your data on our servers, traditional data-subject-access requests (GDPR Article 15, CCPA right-to-know, etc.) have nothing for us to disclose — there is no record of you to retrieve. If you have questions about the data Arcmin processes locally on your device, see Sections 1–3 above, or contact us using the address at the top of this policy.
 
 ## 12. Contact
 
-For privacy-related questions, write to **support@spectrumworks.example** *(replace with your actual support email before publishing)*.
+For privacy-related questions, write to **developer@spectrumworks.online**.
 
 ---
 
-*Arcmin is published by Spectrum Works. Source code: [github.com/UmbraTenebrae/arcmin](https://github.com/UmbraTenebrae/arcmin)*
+*Arcmin is published by Spectrum Works.*
