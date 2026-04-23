@@ -1,9 +1,3 @@
----
-layout: page
-title: Privacy Policy
-permalink: /privacy-policy/
----
-
 # Privacy Policy for Arcmin
 
 **Effective date:** April 23, 2026
